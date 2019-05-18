@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018/W32TeX) (preloaded format=xelatex 2019.4.4)  9 APR 2019 23:34
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018/W32TeX) (preloaded format=xelatex 2019.4.4)  16 MAY 2019 22:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1385,7 +1385,19 @@ File: tikzlibrarypositioning.code.tex 2019/02/02 v3.1.1 (3.1.1)
 Package: xeCJK-listings 2018/04/30 v3.7.1 xeCJK patch file for listings
 \l__xeCJK_listings_max_char_int=\count351
 \l__xeCJK_listings_flag_int=\count352
-) (./thesis.aux (./body/abstract.aux))
+) (./thesis.aux (./body/abstract.aux) (./body/chapter1.aux) (./body/chapter2.au
+x)
+(./body/chapter3.aux
+
+LaTeX Warning: Label `fig:entity_relationship' multiply defined.
+
+
+LaTeX Warning: Label `cascade选项' multiply defined.
+
+
+LaTeX Warning: Label `fig:rb_users_papers' multiply defined.
+
+) (./body/chapter4.aux) (./body/reference.aux) (./body/acknowledge.aux))
 \openout1 = `thesis.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
@@ -1408,7 +1420,8 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 54.
 LaTeX Font Info:    ... okay on input line 54.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 54.
 LaTeX Font Info:    ... okay on input line 54.
- ABD: EverySelectfont initializing macros
+
+ABD: EverySelectfont initializing macros
 LaTeX Info: Redefining \selectfont on input line 54.
 
 Package fontspec Info: Adjusting the maths setup (use [no-math] to avoid
@@ -1615,10 +1628,142 @@ Underfull \hbox (badness 10000) in paragraph at lines 46--51
  (./body/abstract.tex [1
 
 
-]
-Underfull \hbox (badness 10000) in paragraph at lines 14--15
+]) [2
 
+] (./thesis.toc [3
+
+])
+\tf@toc=\write5
+\openout5 = `thesis.toc'.
+
+ [4]
+\openout2 = `body/chapter1.aux'.
+
+ (./body/chapter1.tex
+
+Package fontspec Info: Could not resolve font "KaiTi/BI" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: Could not resolve font "KaiTi/B" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: Could not resolve font "KaiTi/I" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: Font family 'KaiTi(0)' created for font 'KaiTi' with
+(fontspec)             options [Script={CJK}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->"KaiTi/OT:script=hani;language=DFLT;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+Make it at least 12.64723pt.
+We now make it that large for the rest of the document.
+This may cause the page layout to be inconsistent, however.
+
+[1
+
+] [2]) [3]
+\openout2 = `body/chapter2.aux'.
+
+ (./body/chapter2.tex
+File: figure/frontend_structure.png Graphic file (type bmp)
+<figure/frontend_structure.png>
+ [4
+
+
+]
+File: figure/backend_structure.png Graphic file (type bmp)
+<figure/backend_structure.png>
+ [5]
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2018/09/02 1.7 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2018/09/02 1.7 (Carsten Heinz)
+) [6]
+Overfull \hbox (21.54674pt too wide) in paragraph at lines 104--105
+\TU/lmr/m/n/12.045 Werkzeug \TU/SimSun(0)/m/n/12.045 ，|  模 板 引 擎 则 使 用 \TU/lmr/
+m/n/12.045 Jinja2 \TU/SimSun(0)/m/n/12.045 。| \TU/lmr/m/n/12.045 Flask \TU/SimS
+un(0)/m/n/12.045 使 用 \TU/lmr/m/n/12.045 BSD \TU/SimSun(0)/m/n/12.045 授 权。| \TU/
+lmr/m/n/12.045 Flask \TU/SimSun(0)/m/n/12.045 也 被 称 为  |“\TU/lmr/m/n/12.045 mic
+roframework\TU/SimSun(0)/m/n/12.045 ”| ，|
  []
 
-) [2
+[7] [8] [9]
+File: figure/entity_relationship.jpg Graphic file (type bmp)
+<figure/entity_relationship.jpg>
+ [10] [11]
+File: figure/rb_users_papers.jpg Graphic file (type bmp)
+<figure/rb_users_papers.jpg>
+ [12]) [13]
+\openout2 = `body/chapter3.aux'.
 
+ (./body/chapter3.tex [14
+
+
+] [15] [16] [17]
+[18] [19] [20]) [21]
+\openout2 = `body/chapter4.aux'.
+
+ (./body/chapter4.tex [22
+
+
+] [23]
+Overfull \hbox (21.74225pt too wide) in paragraph at lines 85--86
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[24] [25] [26] [27] [28]) [29]
+\openout2 = `body/reference.aux'.
+
+ (./body/reference.tex) [30
+
+
+]
+\openout2 = `body/acknowledge.aux'.
+
+
+(./body/acknowledge.tex) [31
+
+
+]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 98.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 98.
+ (./thesis.aux (./body/abstract.aux)
+(./body/chapter1.aux) (./body/chapter2.aux) (./body/chapter3.aux)
+(./body/chapter4.aux) (./body/reference.aux) (./body/acknowledge.aux))
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 98.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 98.
+
+
+Package rerunfilecheck Warning: File `thesis.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `thesis.out':
+(rerunfilecheck)             Before: E94FF0BB2471239F335F3FDD405D5E0A
+(rerunfilecheck)             After:  948D70729A4ADA4E2D7E9BD96B83DA6F.
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 42858 strings out of 492933
+ 887890 string characters out of 6136538
+ 1166913 words of memory out of 5000000
+ 46174 multiletter control sequences out of 15000+600000
+ 541043 words of font info for 98 fonts, out of 8000000 for 9000
+ 1348 hyphenation exceptions out of 8191
+ 55i,12n,79p,942b,1714s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+Output written on thesis.pdf (37 pages).

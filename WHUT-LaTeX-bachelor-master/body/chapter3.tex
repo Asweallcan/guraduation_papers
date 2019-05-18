@@ -1,110 +1,195 @@
-\section{数据库设计}
+\section{系统实现}
 
-通过SqlAlchemy我们可以方便的在数据库中创建一个表并生成记录，同时也可以方便的进行数据库操作，定义数据之间的关系，搭配Flask-Migrate还可以方便的进行数据库备份、恢复和回滚。
+如果说一个项目的架构和数据库设计是一个项目的骨架，那么业务代码就是在其骨架上面生长的骨肉。一个好的骨架能够让血肉长的更加健康。
 
-这个系统的主要有三个表，用户表(users)，试卷表(papers)，成绩表(grades)，数据库实体之间的关系，箭头都代表一对多关系，粗体字体为必填字段。
+\subsection{前后端交互模型}
 
-\begin{figure}[thbp!]
-	\centering
-	\includegraphics[width=1.0\linewidth]{figure/entity_relationship}
-	\caption{数据库关系}
-	\label{fig:entity_relationship}
-\end{figure}
+\subsubsection{RESTful API}
 
-\subsection{一对多关系}
+REST全称是Representational State Transfer，中文意思是表述（编者注：通常译为表征）性状态转移。 它首次出现在2000年Roy Fielding的博士论文中，Roy Fielding是HTTP规范的主要编写者之一。 他在论文中提到："我这篇文章的写作目的，就是想在符合架构原理的前提下，理解和评估以网络为基础的应用软件的架构设计，得到一个功能强、性能好、适宜通信的架构。REST指的是一组架构约束条件和原则。" 如果一个架构符合REST的约束条件和原则，我们就称它为RESTful架构。
 
-如图中，用户表和成绩表，试卷表和成绩表之间都为一对多关系。SqlAlchemy中可以方便的通过relationship和foreignKey进行设置一对多关系。
+REST本身并没有创造新的技术、组件或服务，而隐藏在RESTful背后的理念就是使用Web的现有特征和能力， 更好地使用现有Web标准中的一些准则和约束。虽然REST本身受Web技术的影响很深， 但是理论上REST架构风格并不是绑定在HTTP上，只不过目前HTTP是唯一与REST相关的实例。 所以我们这里描述的REST也是通过HTTP实现的REST。
+
+RESTful API有以下的特征：
+
+\begin{enumerate}
+	\item 每一个uri代表一种资源。
+	\item 客户端和服务器之间，传递这种资源的某种表现层。
+	\item 客户端通过四个HTTP动词(GET、POST、DELETE、PUT)，对服务器端资源进行操作，实现"表现层状态转化"(增删改查)。
+	\item URL中通常不出现动词，只有名词。
+	\item 使用JSON不使用XML。
+\end{enumerate}
+
+\subsubsection{使用Redux存储网络请求状态}
+
+Redux 是 JavaScript 状态容器，提供可预测化的状态管理。可以让你构建一致化的应用，运行于不同的环境（客户端、服务器、原生应用），并且易于测试。其使用Immutable数据结合React能让页面相应数据进行最小颗粒度的更新DOM结点。
+
+因为Ajax都是异步的一个请求过程，需要在回调函数内对数据进行处理，这种就会出现当依赖的Ajax请求过多的情况下，不断的编写和嵌套回调函数的时候代码就会变得非常难以阅读和维护，所以使用Promise封装一种通用的Ajax API同时用Redux进行对数据的保存是非常有必要的。
+
+当进行一个Ajax请求的时候，我们默认出发一个Redux Action将Ajax的数据储存在Redux中然后使用React-Redux的Connect函数将我们的组件根据Redux中的状态变化进行更新。
+
+注意这里我们一定要在PromiseLike Function里面返回一个Promise对象来表示该Promise的状态，否则在使用Await关键字的时候，不会进行阻塞。
+
+这样做的好处就是，通过封装了axios进行http请求的时候可以有一个公共的地方存储返回的数据，同时还可以在发生错误的时候或者在权限不够的时候读取headers直接取消渲染并给出提示让用户进行相应的操作。
+
+\subsection{账号系统}
+
+一个系统想要有人使用，给每个人都提供服务，都需要一个完善的账号系统，每个人都有自己的账号，进行登陆，使用系统，更改设置等等。
+
+\subsubsection{密码加密}
+
+出于安全考虑，用户的密码不通过明文保存，除非你对自己的运维系统有着极高的自信，当然这样也不建议这样做。毕竟人外有人，天外有天，如果没有被盗取那么说明你的系统价值还不是那么的高。
+
+werkzeug.security是一个Python的密码包，其中的generate\_password\_hash的方法可以创建MD5加密的字符串，check\_password\_hash可以用于验证密码是否正确。
 
 \begin{lstlisting}[language=C]
-class User(Model):
-  ...
-  grades = relationship("Grade", backref="user", lazy="dynamic",
-  cascade="all, delete-orphan", passive_deletes=True)
-  
-class Paper(Model):
-  ...
-  grades = relationship("Grade", backref="paper", lazy="dynamic",
-  cascade="all, delete-orphan", passive_deletes=True)
-  
-class Grade(Model):
-  ...
-  user_id = Column(Integer, ForeignKey("users.id",
-  ondelete="CASCADE"))
-  paper_id = Column(Integer, ForeignKey("papers.id",
-  ondelete="CASCADE"))
+@property
+def password(self):
+raise TypeError("cannot read a user's password")
+
+@password.setter
+def password(self, password):
+self.password_hash = generate_password_hash(password)
+
+def verify_password(self, password):
+if not password:
+return False
+return check_password_hash(self.password_hash, password)
 \end{lstlisting}
 
 \begin{center}
-	{\small 建立用户和成绩，试卷与成绩之间的一对多关系}
+	{\small 用户密码的创建和验证}
 \end{center}
 
-relationship的这一端代表着1的这一端，backref传入的是在Grade对象下如何访问User或者Paper对象，lazy代表如何访问这个对象，一对多之间的关系通过外键的形式进行设置，比如users.id代表着是users这张表中的id作为外键。同时外键的字段设置需要和做外键的字段类型一模一样，否则会报错。
+\subsubsection{token的创建和验证}
 
-\begin{enumerate}
-\item select，默认选项，直接查找出所有对象，例如user.grades直接通过列表列出所有该用户下的grade
-\item dynamic返回的是一个查询集，例如 users.grades.filter\_by(...)返回的是一个查询集可以进行筛选操作。
-\item joine类似于select，但是seletc在查询的过程中需要查询两个表，而joined是建立一个新的连结表进行查询，在数额大的情况下使用joined能节省不少性能。
-\end{enumerate}
-
-\begin{center}
-	{\small lazy选项}
-\end{center}
-
-SqlAlchemy作为最强大的ORM工具当然不只是定义关系，还有就是定义实体不存在的时候如何处理与其相关的数据，加入一个用户被删除了，那么于其关联的成绩也应该要全部删除，而不是作为冗余数据存在数据库中，一套试卷被删除了同理。那么cascade就是干这个事情的。
-
-\begin{enumerate}
-\item save-update，默认选项，添加一条数据的时候会把其他和它相关的数据都添加到数据库中。
-\item merge，默认选项，合并一个对象的时候会将使用了relationship相关联的对象也进行merge操作。
-\item expunge，移除操作的时候，会将相关联的对象也进行移除，这个操作只是从session中删除，而不是从真正的数据库中删除。
-\item all，包含上面所有的选项。
-\item delete-orphan，删除相关的孤儿数据。
-\label{cascade选项}
-\end{enumerate}
-
-\begin{center}
-	{\small cascade选项}
-\end{center}
-
-对应的要在多的那一端设置ondelete属性。
-
-至此一对多的关系就设置好了，使用Flask-Migrate升级数据库的时候可以自动检测相关外键的设置然后更新数据库。
-
-\subsection{多对多关系}
-
-\begin{figure}[thbp!]
-	\centering
-	\includegraphics[width=1.0\linewidth]{figure/rb_users_papers}
-	\caption{多对多关系}
-	\label{fig:rb_users_papers}
-\end{figure}
-
-一个用户可以做多张试卷，一张试卷也可以有很多用户来做。这就是一个多对多关系。多对多关系中，需要一个额外的连接表来做查询。
+token用于用户的登陆状态的保存，其通过cookie的形式保存在request头中，后端通过对response的set-cookie字段对网页的该域下进行cookie的设置。同时token可以设置过期时间。
 
 \begin{lstlisting}[language=C]
-class User(Model):
-  ...
-  papers = relationship("Paper", secondary=rb_users_papers,
-  lazy="dynamic")
-
-class Paper(Model):
-  ...
-  users = relationship("User", secondary=rb_users_papers,
-  lazy="dynamic")
-
-// 连接表
-rb_users_papers = Table(
-  "rb_users_papers",
-  Column("user_id", Integer, ForeignKey("users.id")，
-  primary_key=True),
-  Column("paper_id", Integer, ForeignKey("papers.id"),
-  primary_key=True)
-)
+def generate_confirm_token(self):
+s = Serializer(current_app.config["SECRETE_KEY"],
+expires_in=60 * 5, salt=current_app.config["CONFIRM_TOKEN"])
+token = s.dumps({"user": self.username})
+return token.decode()
 \end{lstlisting}
 
 \begin{center}
-	{\small 多对多关系代码}
+	{\small 得到加密token的代码}
 \end{center}
 
-上面的代码说明了users表和papers表之间是通过一个rb\_users\_papers进行连接查询的，同时连接表中的每个字段都需要与原字段的属性相同。在原表中的relationship中需要设置secondary属性来进行使用连接表的查询。使用连接表进行连接的两个表，任何一条记录被删除以后相关的连接表记录也会被删除，当然也可以设置与其关联的记录也被删除，但在此处的情况不适合这样做，试想一下，如果一个用户记录被删除了，那么该用户做过所有的试卷记录也会被删除，别人就无法做了，这样是非常的不合适的情况。
+初始化对象的时候向Serializer内部传入解密字符串，token的有效时长，以及加密的盐。此token的时长是五分钟，将用户的用户名做了加密通过HTTP传给前端，这里要注意，因为token生成的是二进制字符串，我们先要把它解密成普通字符串以后才能设置cookie，前端下次请求的时候会带上这个数据，后端再进行解密即可获得用户的状态。
 
-数据库的设计是一个完善的软件系统必备也是最重要的一个阶段，一个好的数据库设计能让一个系统的性能良好、易于维护、易于拓展。有些人可能会觉得直接手写sql更加灵活和方便，但是如果作为一个多人维护开发的系统来说，每个人都有自己写sql的习惯，会让项目代码水平层次不齐难于维护，这时候就要使用SqlAlchemy这种工具了，通过一种OOP的方式来进行数据库的管理。
+\begin{lstlisting}[language=C]
+response.set_cookie("token", token, max_age=max_age, 
+httponly=True)
+\end{lstlisting}
+
+\begin{center}
+	{\small response设置header中的cookie}
+\end{center}
+
+\begin{lstlisting}[language=C]
+s = Serializer(current_app.config["SECRETE_KEY"], 
+salt=current_app.config["CONFIRM_TOKEN"])
+try:
+data = s.loads(token)
+if username != data["user"]:
+return -2, "Bad signature"
+return 0, "Confirm success"
+except SignatureExpired:
+return -1, "Signature expired"
+except BadSignature:
+return -2, "Bad signature"
+\end{lstlisting}
+
+\begin{center}
+	{\small 验证token的代码}
+\end{center}
+
+同样的，在解密的过程中需要获得Serializer的实例，当loads一个token的时候，如果验证失败或者token超时，代码会抛出异常，SignatureExpired和BadSignature，我们需要对对应的状态进行处理给前端响应。
+
+\subsubsection{注册与邮箱验证}
+
+现在许多软件注册都需要用手机号，并且一个手机号只能注册一次，但在此发送短信需要使用第三方收费服务，所以我使用替代的邮箱来进行验证。既然需要邮箱，我们就需要写一个页面来进行验证结果的展示，同时也用到了token。以一个注册用户名为cindy的用户来看，我们把{username: "cindy"}通过Serializer进行加密生成一个token，同时我们的注册页面的pathname是/confirm，那么我们给该用户注册成功发送邮箱中的链接就是http(s)://origin/confirm?token=\{token\}，当访问这个页面的时候我们把token传给后端，后端进行解密然后验证token，把数据库中相应用户的邮箱激活。当然如果在验证时候token过期了还可以重新发送验证邮箱。
+
+\subsubsection{登陆与找回密码}
+
+登陆的时候会首先查看是否邮箱已经激活，如果没有激活则发送新的验证邮箱去激活账号才能登陆。同样的如果此账号忘记了密码，则可以通过邮箱进行密码找回和重新设置密码。
+
+\subsection{上传文件与解析试卷}
+
+心理评测系统最重要的是试卷，作为管理员需要进行试卷的编写和上传，后端要对上传的文件进行分析然后记录到数据库中。
+
+\subsubsection{上传文件}
+
+上传文件的组件使用Ant Design提供的Upload组件，该组件可以在服务端在上传完成后返回一个数据结构，让前端记录该次上传的状态，比如返回一个url让前端可以进行该文件的下载。上传文件一般使用POST方法，因为POST传输数据没有体积的限制。
+
+\subsubsection{解析试卷}
+
+因为上传的是一个xlsx表格文件，所以需要对其进行读取和解析数据。Pandas就是在此委以重任。
+
+\begin{lstlisting}[language=C]
+// 读取上传的文件建立矩阵
+df = pd.DataFrame(pd.read_excel(file_path))
+// 读取各列的数据并进行处理入库
+for field in fields:
+setattr(paper, field, 
+"@".join(df[field].dropna()
+.astype("str")
+.map(str.strip)
+.values))
+db.session.commit()
+\end{lstlisting}
+
+通过简单的几行代码，就可以把复杂的解析试卷和记录数据库的工作完成。
+
+\subsection{数据分析}
+
+管理员上传的试卷文件中有着每张试卷的得分指标以及每个问题每个答案的得分，在用户做完每套试卷后，数据库都存着用户回答每个问题的答案，所以我们要对这个每个答案的得分进行分析得出得分同时还要计筭该得分项在所有用户中的占比以及每个问题的最多人选答案。
+
+\subsubsection{新开线程}
+
+这是一个复杂的过程，当你的试卷题目变多，分析将会是一个消耗时间和性能的过程。Ajax是一个请求响应的过程，所以分析的过程不能阻塞HTTP的响应，否则会造成前端等待时间过长甚至造成超时，这不是一个好的体验，所以我们要先给页面一个响应后新开一个线程进行数据分析的过程，同时数据库中也需要对该成绩有一个状态的记录，是否在分析或者分析完毕了，通知前端什么时候可以进行查看分析结果。
+
+\begin{lstlisting}[language=C]
+@copy_request_context
+def new_thread():
+...
+t = Thread(target=new_thread)
+t.start()
+\end{lstlisting}
+
+\begin{center}
+	{\small 新开一个线程}
+\end{center}
+
+当新开一个线程的时候，如果在函数中使用了和Flask相关的工具，是访问不到这次请求的数据的，所以要使用copy\_request\_context这个装饰器来复制一个request请求的上下文。
+
+\subsubsection{计算试卷平均分}
+
+当我们计算出每个用户的得分以后，我们可以计算整个试卷的平均得分，使用numpy可以方便的进行批量的计算。
+
+\begin{lstlisting}[language=C]
+scores = np.array([list(map(int, 
+grade.score.split("@"))) for grade in grades])
+paper.average = "@".join(map(str, 
+map(lambda x: round(x, 2), score_sum / finished_count)))
+\end{lstlisting}
+
+使用numpy建立一个numpyList类型的列表，因为其类型重写了\_\_truediv\_\_魔法函数，相当于C++中的重载运算符，重写了除法的运算方式，可以方便得出每个指标的平均值。
+
+\subsubsection{计算每个问题最多回答的答案}
+
+想得到每个问题最多人回答的答案，我们需要对每个问题的答案进行计数找到最多的那个。通过自己循环编写当然可以实现，可Python作为一门受数据分析追捧的语言，当然不会那么麻烦。
+
+\begin{lstlisting}[language=C]
+choices = np
+.array([grade.answers.split("@") for grade in grades]).T
+most_choice = "@".join(map(lambda x: Counter(x)
+.most_common(1)[0][0],
+choices))
+\end{lstlisting}
+
+T可以将一个矩阵转置。Counter是Python内置的一个计数器类，可以直接获取每个元素出现的次数。
+
+几行代码我们就可以完成复杂的计数运算。
