@@ -1,11 +1,49 @@
 \section{系统设计}
-此心理评测系统使用B/S架构，前端使用React框架搭建用户界面，后端使用Python的Flask Web框架搭建Restful API。
 
-\subsection{项目架构}
+\subsection{总体设计}
 
-好的项目目录有清晰的条理，可以通过目录知道各个文件夹的作用，易于拓展。
+\subsubsection{功能设计}
+
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/functions}
+	\caption{系统功能设计}
+	\label{fig:functions}
+\end{figure}
+
+心理评测系统由登陆模块、用户中心、评测中心和管理中心四大模块组成。登陆模块涉及用户的注册、登陆、邮箱验证、找回密码四个功能。用户中心可以修改个人信息、查看已经做的试卷的测评结果、查看未完成试卷的进度。评测中心可以做试卷进行评测和查看结果。管理中心是管理员对试卷、用户、成绩进行管理的模块。
+
+\subsubsection{用例设计}
+
+\begin{figure}[htp]
+	\centering
+	\includegraphics[width=0.8\linewidth]{figure/user_case}
+	\caption{系统用例图}
+	\label{fig:user_case}
+\end{figure}
+
+心里评测系统的用户分为两种类型：用户和管理员，其中管理员可以进行所有用户的操作，并且可以进入管理界面对试卷、用户、成绩进行管理。
+
+\subsubsection{流程设计}
+
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=0.8\linewidth]{figure/user_use}
+	\caption{用户流程图}
+	\label{fig:user_use}
+\end{figure}
+
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/admin_use}
+	\caption{管理员流程图}
+	\label{fig:admin_use}
+\end{figure}
+
+\subsection{项目设计}
 
 \subsubsection{前端项目架构}
+
 \begin{figure}[thbp!]
 	\centering
 	\includegraphics[width=0.3\linewidth]{figure/frontend_structure}
@@ -164,33 +202,17 @@ Webpack在原始配置的情况下，因为是单页面应用，所以打包出�
 
 常用的优化有以下几点：
 
-\begin{enumerate}
-	\item 配置optimization中的splitChunks选项，会根据依赖图对于多次依赖的包单独打包然后进行引用。
-	\item 配置externals选项对于第三库在html文件中进行CDN引用，打包时候忽略该库。
-	\item 使用uglifyjsPlugin对打包文件进行压缩。
-	\item 使用懒加载进行加载组件和页面，react-loadable可以通过一个高阶组件包裹我们的异步组件使用import函数进行异步的加载组件，当加载成功的时候显示组件否则就加载Loading组件。
-	\item 配置Gzip。
-\end{enumerate}
+(1) 配置optimization中的splitChunks选项，会根据依赖图对于多次依赖的包单独打包然后进行引用。
+
+(2) 配置externals选项对于第三库在html文件中进行CDN引用，打包时候忽略该库。
+
+(3) 使用uglifyjsPlugin对打包文件进行压缩。
+
+(4) 使用懒加载进行加载组件和页面，react-loadable可以通过一个高阶组件包裹我们的异步组件使用import函数进行异步的加载组件，当加载成功的时候显示组件否则就加载Loading组件。
+
+(5) 配置Gzip。
 
 进行上面的优化以后，打包以后的文件按照路由和组件分成了十几个文件，最大的体积不超过400KB，减少了首屏加载的时间。
-
-
-\subsubsection{SqlAlchemy}
-SqlAlchemy是Python编程语言下的一款开源数据ORM框架。提供了SQL工具包及对象关系映射（ORM）工具，使用MIT许可证发行。SQLAlchemy“采用简单的Python语言，为高效和高性能的数据库访问设计，实现了完整的企业级持久模型”。SQLAlchemy的理念是，SQL数据库的量级和性能重要于对象集合；而对象集合的抽象又重要于表和行。因此，SQLAlchemy采用了类似于Java里Hibernate的数据映射模型，而不是其他ORM框架采用的Active Record模型。不过，Elixir和declarative等可选插件可以让用户使用声明语法。
-
-\begin{lstlisting}[language=C]
-class User(Model):
-  __tablename__ = "users"
-  id = Column(Integer, primary_key=True)
-  name = Column(String(32), nullable=False)
-  password = Column(String(32), nullable=False)
-\end{lstlisting}
-
-\begin{center}
-	{\small 使用SqlAlchemy创建一个用户模型}
-\end{center}
-
-在上面我们建立了一个用户模型，对应数据库中的users表，该模型拥有id、name、password等字段，其中id是主键。
 
 \subsubsection{Pandas}
 
@@ -238,11 +260,11 @@ ondelete="CASCADE"))
 
 relationship的这一端代表着1的这一端，backref传入的是在Grade对象下如何访问User或者Paper对象，lazy代表如何访问这个对象，一对多之间的关系通过外键的形式进行设置，比如users.id代表着是users这张表中的id作为外键。同时外键的字段设置需要和做外键的字段类型一模一样，否则会报错。
 
-\begin{enumerate}
-	\item select，默认选项，直接查找出所有对象，例如user.grades直接通过列表列出所有该用户下的grade
-	\item dynamic返回的是一个查询集，例如 users.grades.filter\_by(...)返回的是一个查询集可以进行筛选操作。
-	\item joine类似于select，但是seletc在查询的过程中需要查询两个表，而joined是建立一个新的连结表进行查询，在数额大的情况下使用joined能节省不少性能。
-\end{enumerate}
+(1) select，默认选项，直接查找出所有对象，例如user.grades直接通过列表列出所有该用户下的grade
+
+(2) dynamic返回的是一个查询集，例如 users.grades.filter\_by(...)返回的是一个查询集可以进行筛选操作。
+
+(3) joine类似于select，但是seletc在查询的过程中需要查询两个表，而joined是建立一个新的连结表进行查询，在数额大的情况下使用joined能节省不少性能。
 
 \begin{center}
 	{\small lazy选项}
@@ -250,14 +272,15 @@ relationship的这一端代表着1的这一端，backref传入的是在Grade对�
 
 SqlAlchemy作为最强大的ORM工具当然不只是定义关系，还有就是定义实体不存在的时候如何处理与其相关的数据，加入一个用户被删除了，那么于其关联的成绩也应该要全部删除，而不是作为冗余数据存在数据库中，一套试卷被删除了同理。那么cascade就是干这个事情的。
 
-\begin{enumerate}
-	\item save-update，默认选项，添加一条数据的时候会把其他和它相关的数据都添加到数据库中。
-	\item merge，默认选项，合并一个对象的时候会将使用了relationship相关联的对象也进行merge操作。
-	\item expunge，移除操作的时候，会将相关联的对象也进行移除，这个操作只是从session中删除，而不是从真正的数据库中删除。
-	\item all，包含上面所有的选项。
-	\item delete-orphan，删除相关的孤儿数据。
-	\label{cascade选项}
-\end{enumerate}
+(1) save-update，默认选项，添加一条数据的时候会把其他和它相关的数据都添加到数据库中。
+
+(2) merge，默认选项，合并一个对象的时候会将使用了relationship相关联的对象也进行merge操作。
+
+(3) expunge，移除操作的时候，会将相关联的对象也进行移除，这个操作只是从session中删除，而不是从真正的数据库中删除。
+
+(4) all，包含上面所有的选项。
+
+(5) delete-orphan，删除相关的孤儿数据。
 
 \begin{center}
 	{\small cascade选项}

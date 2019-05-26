@@ -1,59 +1,59 @@
-\section{系统实现}
-
-如果说一个项目的架构和数据库设计是一个项目的骨架，那么业务代码就是在其骨架上面生长的骨肉。一个好的骨架能够让血肉长的更加健康。
+\section{系统编码}
 
 \subsection{前后端交互模型}
 
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/BS_structure}
+	\caption{B/S架构图}
+	\label{fig:BS_structure}
+\end{figure}
+
 \subsubsection{RESTful API}
 
-REST全称是Representational State Transfer，中文意思是表述（编者注：通常译为表征）性状态转移。 它首次出现在2000年Roy Fielding的博士论文中，Roy Fielding是HTTP规范的主要编写者之一。 他在论文中提到："我这篇文章的写作目的，就是想在符合架构原理的前提下，理解和评估以网络为基础的应用软件的架构设计，得到一个功能强、性能好、适宜通信的架构。REST指的是一组架构约束条件和原则。" 如果一个架构符合REST的约束条件和原则，我们就称它为RESTful架构。
-
-REST本身并没有创造新的技术、组件或服务，而隐藏在RESTful背后的理念就是使用Web的现有特征和能力， 更好地使用现有Web标准中的一些准则和约束。虽然REST本身受Web技术的影响很深， 但是理论上REST架构风格并不是绑定在HTTP上，只不过目前HTTP是唯一与REST相关的实例。 所以我们这里描述的REST也是通过HTTP实现的REST。
+REST全称是Representational State Transfer，中文意思是表述（编者注：通常译为表征）性状态转移。
 
 RESTful API有以下的特征：
 
-\begin{enumerate}
-	\item 每一个uri代表一种资源。
-	\item 客户端和服务器之间，传递这种资源的某种表现层。
-	\item 客户端通过四个HTTP动词(GET、POST、DELETE、PUT)，对服务器端资源进行操作，实现"表现层状态转化"(增删改查)。
-	\item URL中通常不出现动词，只有名词。
-	\item 使用JSON不使用XML。
-\end{enumerate}
+(1)每一个uri代表一种资源。
+
+(2)客户端和服务器之间，传递这种资源的某种表现层。
+
+(3)客户端通过四个HTTP动词(GET、POST、DELETE、PUT)，对服务器端资源进行操作，实现"表现层状态转化"(增删改查)。
+
+(4)URL中通常不出现动词，只有名词。
+
+(5)使用JSON不使用XML。
 
 \subsubsection{使用Redux存储网络请求状态}
 
 Redux 是 JavaScript 状态容器，提供可预测化的状态管理。可以让你构建一致化的应用，运行于不同的环境（客户端、服务器、原生应用），并且易于测试。其使用Immutable数据结合React能让页面相应数据进行最小颗粒度的更新DOM结点。
 
-因为Ajax都是异步的一个请求过程，需要在回调函数内对数据进行处理，这种就会出现当依赖的Ajax请求过多的情况下，不断的编写和嵌套回调函数的时候代码就会变得非常难以阅读和维护，所以使用Promise封装一种通用的Ajax API同时用Redux进行对数据的保存是非常有必要的。
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/redux}
+	\caption{redux数据流}
+	\label{fig:redux}
+\end{figure}
 
-当进行一个Ajax请求的时候，我们默认出发一个Redux Action将Ajax的数据储存在Redux中然后使用React-Redux的Connect函数将我们的组件根据Redux中的状态变化进行更新。
-
-注意这里我们一定要在PromiseLike Function里面返回一个Promise对象来表示该Promise的状态，否则在使用Await关键字的时候，不会进行阻塞。
-
-这样做的好处就是，通过封装了axios进行http请求的时候可以有一个公共的地方存储返回的数据，同时还可以在发生错误的时候或者在权限不够的时候读取headers直接取消渲染并给出提示让用户进行相应的操作。
+每一次发起http请求获得响应的时候触发一个Redux Action，将服务端返回的数据存储在store中。这样做的好处是所有的需要使用服务端数据的React组件不需要影响父子组件之间的数据流直接提取公用的状态。
 
 \subsection{账号系统}
 
-一个系统想要有人使用，给每个人都提供服务，都需要一个完善的账号系统，每个人都有自己的账号，进行登陆，使用系统，更改设置等等。
-
 \subsubsection{密码加密}
-
-出于安全考虑，用户的密码不通过明文保存，除非你对自己的运维系统有着极高的自信，当然这样也不建议这样做。毕竟人外有人，天外有天，如果没有被盗取那么说明你的系统价值还不是那么的高。
-
-werkzeug.security是一个Python的密码包，其中的generate\_password\_hash的方法可以创建MD5加密的字符串，check\_password\_hash可以用于验证密码是否正确。
 
 \begin{lstlisting}[language=C]
 @property
 def password(self):
-raise TypeError("cannot read a user's password")
+	raise TypeError("cannot read a user's password")
 
 @password.setter
 def password(self, password):
-self.password_hash = generate_password_hash(password)
+	self.password_hash = generate_password_hash(password)
 
 def verify_password(self, password):
-if not password:
-return False
+	if not password:
+		return False
 return check_password_hash(self.password_hash, password)
 \end{lstlisting}
 
@@ -61,135 +61,119 @@ return check_password_hash(self.password_hash, password)
 	{\small 用户密码的创建和验证}
 \end{center}
 
-\subsubsection{token的创建和验证}
+@property装饰器装饰一个属性的getter，修饰的函数名为属性名，返回的值是该属性的getter，此处该属性不能直接访问访问则会抛出异常。
 
-token用于用户的登陆状态的保存，其通过cookie的形式保存在request头中，后端通过对response的set-cookie字段对网页的该域下进行cookie的设置。同时token可以设置过期时间。
+@property同时会全局创建一个@password.setter的装饰器装饰属性的setter，在设置password的时候我们其实设置的是password\_hash这个属性，值为hash加密过的password。
 
-\begin{lstlisting}[language=C]
-def generate_confirm_token(self):
-s = Serializer(current_app.config["SECRETE_KEY"],
-expires_in=60 * 5, salt=current_app.config["CONFIRM_TOKEN"])
-token = s.dumps({"user": self.username})
-return token.decode()
-\end{lstlisting}
+处理登陆请求的时候调用verify\_password函数判断密码是否正确。
 
-\begin{center}
-	{\small 得到加密token的代码}
-\end{center}
+这样做的好处就是即使是数据库管理员也不可能知道用户的密码，只能看到加密后的字符串，同时md5是不可逆的加密方式，不能由加密后的字符串反推出明文，保证了数据的机密性。
 
-初始化对象的时候向Serializer内部传入解密字符串，token的有效时长，以及加密的盐。此token的时长是五分钟，将用户的用户名做了加密通过HTTP传给前端，这里要注意，因为token生成的是二进制字符串，我们先要把它解密成普通字符串以后才能设置cookie，前端下次请求的时候会带上这个数据，后端再进行解密即可获得用户的状态。
+\subsubsection{邮箱验证}
 
-\begin{lstlisting}[language=C]
-response.set_cookie("token", token, max_age=max_age, 
-httponly=True)
-\end{lstlisting}
+用户注册和忘记密码的时候需要使用邮箱验证。在用户注册成功后会创建一个用户独有的token，将token作为链接参数发送给用户邮箱中，在用户点击链接进入验证页面的时候会将token返回后端后端进行验证。
 
-\begin{center}
-	{\small response设置header中的cookie}
-\end{center}
+验证失败有两种结果，一是token过期，二是token中的用户信息不匹配当前用户。通常不匹配的情况有三种：
 
-\begin{lstlisting}[language=C]
-s = Serializer(current_app.config["SECRETE_KEY"], 
-salt=current_app.config["CONFIRM_TOKEN"])
-try:
-data = s.loads(token)
-if username != data["user"]:
-return -2, "Bad signature"
-return 0, "Confirm success"
-except SignatureExpired:
-return -1, "Signature expired"
-except BadSignature:
-return -2, "Bad signature"
-\end{lstlisting}
+(1) 用户自己改了url中的token
 
-\begin{center}
-	{\small 验证token的代码}
-\end{center}
+(2) 中间商劫持被修改了token信息。
 
-同样的，在解密的过程中需要获得Serializer的实例，当loads一个token的时候，如果验证失败或者token超时，代码会抛出异常，SignatureExpired和BadSignature，我们需要对对应的状态进行处理给前端响应。
+(3) 非法重定向。
 
-\subsubsection{注册与邮箱验证}
+无论哪种都是非法篡改token的行为，影响用户信息安全。
 
-现在许多软件注册都需要用手机号，并且一个手机号只能注册一次，但在此发送短信需要使用第三方收费服务，所以我使用替代的邮箱来进行验证。既然需要邮箱，我们就需要写一个页面来进行验证结果的展示，同时也用到了token。以一个注册用户名为cindy的用户来看，我们把{username: "cindy"}通过Serializer进行加密生成一个token，同时我们的注册页面的pathname是/confirm，那么我们给该用户注册成功发送邮箱中的链接就是http(s)://origin/confirm?token=\{token\}，当访问这个页面的时候我们把token传给后端，后端进行解密然后验证token，把数据库中相应用户的邮箱激活。当然如果在验证时候token过期了还可以重新发送验证邮箱。
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/register_email}
+	\caption{注册邮箱激活}
+	\label{fig:register_email}
+\end{figure}
 
-\subsubsection{登陆与找回密码}
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/password_mail}
+	\caption{忘记密码邮箱验证}
+	\label{fig:password_email}
+\end{figure}
 
-登陆的时候会首先查看是否邮箱已经激活，如果没有激活则发送新的验证邮箱去激活账号才能登陆。同样的如果此账号忘记了密码，则可以通过邮箱进行密码找回和重新设置密码。
+\subsection{评测与数据分析}
 
-\subsection{上传文件与解析试卷}
+\subsubsection{上传试卷}
 
-心理评测系统最重要的是试卷，作为管理员需要进行试卷的编写和上传，后端要对上传的文件进行分析然后记录到数据库中。
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/paper}
+	\caption{示例试卷}
+	\label{fig:paper}
+\end{figure}
 
-\subsubsection{上传文件}
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/paper_database}
+	\caption{试卷表}
+	\label{fig:paper_database}
+\end{figure}
 
-上传文件的组件使用Ant Design提供的Upload组件，该组件可以在服务端在上传完成后返回一个数据结构，让前端记录该次上传的状态，比如返回一个url让前端可以进行该文件的下载。上传文件一般使用POST方法，因为POST传输数据没有体积的限制。
+上传试卷是通过上传excel表格。
 
-\subsubsection{解析试卷}
+questions 问题的题目
 
-因为上传的是一个xlsx表格文件，所以需要对其进行读取和解析数据。Pandas就是在此委以重任。
+questions\_img 题目的配图的图片链接地址
 
-\begin{lstlisting}[language=C]
-// 读取上传的文件建立矩阵
-df = pd.DataFrame(pd.read_excel(file_path))
-// 读取各列的数据并进行处理入库
-for field in fields:
-setattr(paper, field, 
-"@".join(df[field].dropna()
-.astype("str")
-.map(str.strip)
-.values))
-db.session.commit()
-\end{lstlisting}
+answers 题目的答案，答案之间用"/"来进行分割
 
-通过简单的几行代码，就可以把复杂的解析试卷和记录数据库的工作完成。
+answers\_img 题目答案的配图的图片链接地址，配图之间用"*"进行分割，只支持一个答案只有一个配图
 
-\subsection{数据分析}
+answers\_score 对应每个答案对应试卷指标的分数加成，正数为增加，负数为减少，0则表示该答案对此项指标没有影响，每个答案之间用"/"分隔，每个指标之间用"\#"分隔
 
-管理员上传的试卷文件中有着每张试卷的得分指标以及每个问题每个答案的得分，在用户做完每套试卷后，数据库都存着用户回答每个问题的答案，所以我们要对这个每个答案的得分进行分析得出得分同时还要计筭该得分项在所有用户中的占比以及每个问题的最多人选答案。
+answers\_multiple 该题目是否是多选，0表示单选，1表示多选
 
-\subsubsection{新开线程}
+comments\_condition 试卷各种评论的条件，每个指标之间用"/"分隔，0\#10表示该指标大于零小于10
 
-这是一个复杂的过程，当你的试卷题目变多，分析将会是一个消耗时间和性能的过程。Ajax是一个请求响应的过程，所以分析的过程不能阻塞HTTP的响应，否则会造成前端等待时间过长甚至造成超时，这不是一个好的体验，所以我们要先给页面一个响应后新开一个线程进行数据分析的过程，同时数据库中也需要对该成绩有一个状态的记录，是否在分析或者分析完毕了，通知前端什么时候可以进行查看分析结果。
+comments 具体的评论内容
 
-\begin{lstlisting}[language=C]
-@copy_request_context
-def new_thread():
-...
-t = Thread(target=new_thread)
-t.start()
-\end{lstlisting}
+score\_attrs 试卷的得分指标
 
-\begin{center}
-	{\small 新开一个线程}
-\end{center}
+table\_name 数据库中的表名
 
-当新开一个线程的时候，如果在函数中使用了和Flask相关的工具，是访问不到这次请求的数据的，所以要使用copy\_request\_context这个装饰器来复制一个request请求的上下文。
+paper\_name 试卷名称
 
-\subsubsection{计算试卷平均分}
+type 试卷的类型，psychology代表室心理评测，grade代表普通试卷，决定了试卷的算分机制
 
-当我们计算出每个用户的得分以后，我们可以计算整个试卷的平均得分，使用numpy可以方便的进行批量的计算。
+description 试卷的描述
 
-\begin{lstlisting}[language=C]
-scores = np.array([list(map(int, 
-grade.score.split("@"))) for grade in grades])
-paper.average = "@".join(map(str, 
-map(lambda x: round(x, 2), score_sum / finished_count)))
-\end{lstlisting}
+上传文件后后端通过读取excel表格文件将数据插入到数据库中。
 
-使用numpy建立一个numpyList类型的列表，因为其类型重写了\_\_truediv\_\_魔法函数，相当于C++中的重载运算符，重写了除法的运算方式，可以方便得出每个指标的平均值。
+每个问题之间的数据使用"@"来进行连接。
+
+在评测时候后端会对表数据进行解析和构建对象发送给前端。
+
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/paper_data}
+	\caption{试卷数据结构}
+	\label{fig:paper_data}
+\end{figure}
+
+其中average、comment、most\_choices、answers、score、score\_above、score\_attrs是完成试卷以后才会有的参数，与数据分析结果的接口是一个接口。
+
+\subsubsection{数据分析}
+
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/grade}
+	\caption{成绩数据表}
+	\label{fig:grade}
+\end{figure}
+
+用户回答完后，答案之间以"@"分隔开来进行存储。在计算得分的时候遍历答案进行指标的加减。
 
 \subsubsection{计算每个问题最多回答的答案}
 
-想得到每个问题最多人回答的答案，我们需要对每个问题的答案进行计数找到最多的那个。通过自己循环编写当然可以实现，可Python作为一门受数据分析追捧的语言，当然不会那么麻烦。
-
 \begin{lstlisting}[language=C]
-choices = np
-.array([grade.answers.split("@") for grade in grades]).T
 most_choice = "@".join(map(lambda x: Counter(x)
-.most_common(1)[0][0],
-choices))
+		.most_common(1)[0][0], choices))
 \end{lstlisting}
 
-T可以将一个矩阵转置。Counter是Python内置的一个计数器类，可以直接获取每个元素出现的次数。
-
-几行代码我们就可以完成复杂的计数运算。
+Counter是Python内置的一个计数器类，可以得到每个元素出现的次数，其中.most\_common函数可以得到列表中出现频率最频繁的元素。
