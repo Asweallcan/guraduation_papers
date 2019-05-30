@@ -1,4 +1,4 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{}
 \providecommand{\bibauthor}[1]{#1}
 \providecommand{\bibeditor}[1]{#1}
 \providecommand{\bibtranslator}[1]{#1}
@@ -22,75 +22,5 @@
 \providecommand{\bibyear}[1]{#1}
 \providecommand{\bibdate}[1]{#1}
 \providecommand{\biburl}[1]{\url{#1}}
-
-\bibitem{001}
-\bibauthor{未来科技}\@.
-  \bibtitle{jQuery实战从入门到精通}\bibmark{[J]}\@.
-  \bibjournal{水利水电出版社}\@, \bibyear{2017}\@.
-
-\bibitem{002}
-\bibauthor{叶维忠}\@.
-  \bibtitle{Python编程从入门到精通}\bibmark{[J]}\@.
-  \bibjournal{人民邮电出版社}\@, \bibyear{2017}\@.
-
-\bibitem{003}
-\bibauthor{杜文洁}\@.
-  \bibtitle{高等学校毕业设计（论文）指导教程——电子信息类专业}\bibmark{[J]}\@.
-  \bibjournal{水利水电出版社}\@, \bibyear{2015}\@.
-
-\bibitem{004}
-\bibauthor{克罗克福特}\@. \bibtitle{JavaScript：The Good
-  Parts}\bibmark{[J]}\@. \bibjournal{东南大学出版社}\@,
-  \bibyear{2008}\@.
-
-\bibitem{005}
-\bibauthor{BROADVIEW}\@. \bibtitle{深入浅出webpack}\bibmark{[J]}\@.
-  \bibjournal{电子工业出版社}\@, \bibyear{2018}\@.
-
-\bibitem{006}
-\bibauthor{BANKS A\@, PORCELLO E}\@.
-  \bibtitle{Python编程从入门到精通}\bibmark{[J]}\@.
-  \bibjournal{中国电力出版社}\@, \bibyear{2017}\@.
-
-\bibitem{007}
-\bibauthor{刘一奇}\@.
-  \bibtitle{React与Redux开发实例精解}\bibmark{[J]}\@, \bibyear{2016}\@.
-
-\bibitem{008}
-\bibauthor{程墨}\@. \bibtitle{深入浅出React和Redux}\bibmark{[J]}\@.
-  \bibjournal{机械工业出版社}\@, \bibyear{2017}\@.
-
-\bibitem{009}
-\bibauthor{程墨}\@. \bibtitle{深入浅出RxJS}\bibmark{[J]}\@.
-  \bibjournal{机械工业出版社}\@, \bibyear{2018}\@.
-
-\bibitem{010}
-\bibauthor{JAWORSKI M\@, ZIADE T}\@. \bibtitle{Expert Python
-  Programming}\bibmark{[J]}\@. \bibjournal{Packt Publishing}\@,
-  \bibyear{2016}\@.
-
-\bibitem{011}
-\bibauthor{RAMALHO L}\@. \bibtitle{Fluent Python}\bibmark{[J]}\@.
-  \bibjournal{人民电邮出版社}\@, \bibyear{2017}\@.
-
-\bibitem{012}
-\bibauthor{GORELICK M\@, OZSVALD I}\@. \bibtitle{High Performance
-  Python}\bibmark{[J]}\@. \bibjournal{人民邮电出版社}\@,
-  \bibyear{2017}\@.
-
-\bibitem{013}
-\bibauthor{米格尔·格林贝格}\@. \bibtitle{Flask Web
-  Development}\bibmark{[J]}\@. \bibjournal{人民邮电出版社}\@,
-  \bibyear{2018}\@.
-
-\bibitem{014}
-\bibauthor{古斯塔夫·勒庞}\@. \bibtitle{The crowd: a study of the popular
-  mind}\bibmark{[J]}\@. \bibjournal{广西师范大学出版社}\@,
-  \bibyear{2011}\@.
-
-\bibitem{015}
-\bibauthor{张静}\@.
-  \bibtitle{慧眼识人——心理学评测在人才管理中的应用}\bibmark{[J]}\@.
-  \bibjournal{辽宁科技}\@, \bibyear{2016}\@.
 
 \end{thebibliography}

@@ -1,31 +1,77 @@
-\section{结论与展望}
+\section{系统运行}
 
-\subsection{系统完成}
+\subsection{用户模块}
 
-心理评测系统完成的功能性需求：
+登陆模块包括用户的注册、登陆、找回密码、邮箱验证等功能，登陆界面的记住我可以设置浏览器中的cookie的过期时间为7天，登陆如图5.1所示，注册如图5.2所示，找回密码如图5.3所示，个人中心如图5.4所示。
 
-(1) 用户注册、登陆、邮箱验证、找回密码
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=0.6\linewidth]{figure/login}
+	\label{fig:login} \\
+	图5.1 登陆界面
+\end{figure}
 
-(2) 管理员管理试卷、管理用户、筛选成绩
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=0.5\linewidth]{figure/register}
+	\label{fig:register} \\
+	图5.2 注册界面
+\end{figure}
 
-(3) 用户参加评测、查看评测结果，用户根据结果了解当下的心理状态，同时可以明确以后在生活中需要做哪些调整
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[height=0.35\linewidth]{figure/find_password}
+	\label{fig:find_password} \\
+	图5.3 找回密码
+\end{figure}
 
-心理评测系统完成的非功能性需求：
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[height=0.35\linewidth]{figure/main}
+	\label{fig:main} \\
+	图5.4 个人中心
+\end{figure}
 
-(1) 页面响应迅速，不会出现白屏等情况。
+\subsection{管理中心}
 
-(2) 对于难以表述的题目，使用图片进行辅助。
+管理中心是管理员对试卷、用户、成绩进行筛选的模块，管理试卷如图5.5所示，管理用户如图5.6所示，可以更改用户的权限、删除用户、上传文件批量增加用户，筛选成绩如图5.7所示。
 
-(3) 用户可在疲倦时暂停答题，系统将对已答部分进行保存，下次进入时可选择继续完成。整体设计友好温和，尽量不给受测者压力，保障测评结果尽量少受外界因素的干扰
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/admin_paper}
+	\label{fig:admin_paper} \\
+	图5.5 管理试卷
+\end{figure}
 
-\subsection{未来展望}
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/admin_user}
+	\label{fig:admin_user} \\
+	图5.6 管理用户
+\end{figure}
 
-(1) 当前心里评测系统对于试卷的管理还不够完善，只能通过上传excel的表格的形式，调整题目的时候只能删除当前的试卷后再进行上传。未来希望做到能够在页面上新增题目和修改题目的信息。
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/admin_grade}
+	\label{fig:admin_grade} \\
+	图5.7 筛选成绩
+\end{figure}
 
-(2) 权限层级不够多，只设有普通用户和管理员两个权限。未来希望加入权限管理系统的权限，对不同的页面都有一个权限列表而不是单纯的区分角色。
+\subsection{评测中心}
 
-(3) 筛选成绩得到的用户列表暂时没有什么用处。未来希望根据成绩筛选出用户以后能对用户进行一些操作，比如发送邮箱类似一样的通知，以邮件的方式通知用户报告或者一些结论性的东西。
+评测中心是用户参加评测和查看报告的模块，具体评测如图5.9所示，评测的结果如图5.10所示，可以看到用户自己的各个指标的得分、试卷的平均分、自己的分数高于做试卷的人数的比例、自己试卷的评论和最多人选的答案。
 
-(4) 题目之间没有关联性。未来希望题目是动态化的，后面的题目都是根据前面已做的题目计算得来的。
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figure/test_main}
+	\label{fig:test_main} \\
+	图5.8 评测内容
+\end{figure}
 
-(5) 数据分析还很浅显，没有更加复杂层级的数据分析。未来希望更加的完善数据分析的维度和算法的复杂度。
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[height=0.7\linewidth]{figure/result_main}
+	\label{fig:result_main} \\
+	图5.9 评测结果
+\end{figure}
+

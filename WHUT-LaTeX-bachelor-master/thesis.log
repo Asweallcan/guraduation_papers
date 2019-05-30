@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.22)  25 MAY 2019 22:17
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.22)  29 MAY 2019 18:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1402,11 +1402,8 @@ Package: xeCJK-listings 2019/04/07 v3.7.2 xeCJK patch file for listings
 \l__xeCJK_listings_flag_int=\count358
 )
 (./thesis.aux (./body/abstract.aux) (./body/chapter1.aux) (./body/chapter2.aux)
-(./body/chapter3.aux) (./body/chapter4.aux
-
-LaTeX Warning: Label `fig:admin_paper' multiply defined.
-
-) (./body/chapter5.aux) (./body/reference.aux) (./body/acknowledge.aux))
+(./body/chapter3.aux) (./body/chapter4.aux) (./body/chapter5.aux)
+(./body/chapter6.aux) (./body/reference.aux) (./body/acknowledge.aux))
 \openout1 = `thesis.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
@@ -1690,7 +1687,7 @@ This may cause the page layout to be inconsistent, however.
 
 [1
 
-] [2]) [3]
+]) [2]
 \openout2 = `body/chapter2.aux'.
 
  (./body/chapter2.tex
@@ -1698,69 +1695,86 @@ File: figure/functions.png Graphic file (type bmp)
 <figure/functions.png>
 File: figure/user_case.jpg Graphic file (type bmp)
 <figure/user_case.jpg>
- [4
+ [1
+
+
+]) [2]
+\openout2 = `body/chapter3.aux'.
+
+ (./body/chapter3.tex
+File: figure/user_use.jpg Graphic file (type bmp)
+<figure/user_use.jpg>
+ [3
 
 
 ]
-File: figure/user_use.jpg Graphic file (type bmp)
-<figure/user_use.jpg>
 File: figure/admin_use.jpg Graphic file (type bmp)
 <figure/admin_use.jpg>
 File: figure/frontend_structure.png Graphic file (type bmp)
 <figure/frontend_structure.png>
- [5] [6] [7]
+ [4]
 File: figure/backend_structure.png Graphic file (type bmp)
 <figure/backend_structure.png>
- [8]
-(/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
+ [5]
+[6] (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2019/02/27 1.8b listings language file
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2019/02/27 1.8b (Carsten Heinz)
-) [9]
-[10] [11]
+) [7]
+[8] [9]
 File: figure/entity_relationship.jpg Graphic file (type bmp)
 <figure/entity_relationship.jpg>
- [12] [13]
+
+Overfull \hbox (7.28812pt too wide) in paragraph at lines 223--224
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[10]
+Overfull \hbox (14.51518pt too wide) in paragraph at lines 228--229
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[11]
 File: figure/rb_users_papers.jpg Graphic file (type bmp)
 <figure/rb_users_papers.jpg>
- [14]) [15]
-\openout2 = `body/chapter3.aux'.
+ [12]) [13]
+\openout2 = `body/chapter4.aux'.
 
- (./body/chapter3.tex
+ (./body/chapter4.tex
 File: figure/BS_structure.jpg Graphic file (type bmp)
 <figure/BS_structure.jpg>
 File: figure/redux.png Graphic file (type bmp)
 <figure/redux.png>
- [16
+ [14
 
 
-] [17]
+] [15]
 File: figure/register_email.png Graphic file (type bmp)
 <figure/register_email.png>
 File: figure/password_mail.png Graphic file (type bmp)
 <figure/password_mail.png>
 File: figure/paper.png Graphic file (type bmp)
 <figure/paper.png>
+ [16] [17] [18]
 File: figure/paper_database.png Graphic file (type bmp)
 <figure/paper_database.png>
- [18] [19]
-[20]
+ [19]
 File: figure/paper_data.png Graphic file (type bmp)
 <figure/paper_data.png>
 File: figure/grade.png Graphic file (type bmp)
 <figure/grade.png>
- [21])
-Overfull \hbox (49.42796pt too wide) in paragraph at lines 179--92
+ [20])
+Overfull \hbox (49.42796pt too wide) in paragraph at lines 195--93
 []\TU/lmr/m/n/12.045 Counter \TU/SongtiSC(0)/m/n/12.045 是 \TU/lmr/m/n/12.045 Py
 thon \TU/SongtiSC(0)/m/n/12.045 内 置 的 一 个 计 数 器 类，|  可 以 得 到 每 个 元 素 出 现 的 次 数，
 |  其 中\TU/lmr/m/n/12.045 .most_common
  []
 
-[22]
-\openout2 = `body/chapter4.aux'.
+[21]
+\openout2 = `body/chapter5.aux'.
 
- (./body/chapter4.tex
+ (./body/chapter5.tex
 File: figure/login.png Graphic file (type bmp)
 <figure/login.png>
 File: figure/register.png Graphic file (type bmp)
@@ -1769,64 +1783,59 @@ File: figure/find_password.png Graphic file (type bmp)
 <figure/find_password.png>
 File: figure/main.png Graphic file (type bmp)
 <figure/main.png>
+ [22
+
+
+] [23]
 File: figure/admin_paper.png Graphic file (type bmp)
 <figure/admin_paper.png>
- [23
-
-
-] [24]
 File: figure/admin_user.png Graphic file (type bmp)
 <figure/admin_user.png>
-File: figure/admin_paper.png Graphic file (type bmp)
-<figure/admin_paper.png>
-File: figure/test.png Graphic file (type bmp)
-<figure/test.png>
+File: figure/admin_grade.png Graphic file (type bmp)
+<figure/admin_grade.png>
 File: figure/test_main.png Graphic file (type bmp)
 <figure/test_main.png>
+ [24]
 File: figure/result_main.png Graphic file (type bmp)
 <figure/result_main.png>
-) [25] [26] [27] [28]
-\openout2 = `body/chapter5.aux'.
+) [25]
+\openout2 = `body/chapter6.aux'.
 
- (./body/chapter5.tex)
-[29
+ (./body/chapter6.tex) [26
 
 
 ]
 \openout2 = `body/reference.aux'.
 
- (./body/reference.tex) [30
+
+(./body/reference.tex) [27
 
 
 ]
 \openout2 = `body/acknowledge.aux'.
 
- (./body/acknowledge.tex) [31
+ (./body/acknowledge.tex) [28
 
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 99.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 99.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 100.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 100.
  (./thesis.aux
 (./body/abstract.aux) (./body/chapter1.aux) (./body/chapter2.aux)
 (./body/chapter3.aux) (./body/chapter4.aux) (./body/chapter5.aux)
-(./body/reference.aux) (./body/acknowledge.aux))
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 99.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 99.
+(./body/chapter6.aux) (./body/reference.aux) (./body/acknowledge.aux))
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 100.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 100.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: B7412C345B5A98D13AC1F712CE1E0AC4.
-
-
-LaTeX Warning: There were multiply-defined labels.
-
+(rerunfilecheck)             Checksum: A11EE38439FA088904D2CB692857D69B.
  ) 
 Here is how much of TeX's memory you used:
- 42878 strings out of 492916
- 892747 string characters out of 6133345
- 1161536 words of memory out of 5000000
- 46185 multiletter control sequences out of 15000+600000
- 541043 words of font info for 98 fonts, out of 8000000 for 9000
+ 42872 strings out of 492916
+ 892129 string characters out of 6133345
+ 1163215 words of memory out of 5000000
+ 46173 multiletter control sequences out of 15000+600000
+ 541035 words of font info for 97 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  60i,12n,83p,942b,1715s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on thesis.pdf (37 pages).
+Output written on thesis.pdf (36 pages).

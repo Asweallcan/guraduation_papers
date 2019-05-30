@@ -1,179 +1,304 @@
-\section{系统编码}
+\section{系统设计}
 
-\subsection{前后端交互模型}
+\subsection{需求设计}
 
-\begin{figure}[thbp!]
-	\centering
-	\includegraphics[width=1.0\linewidth]{figure/BS_structure}
-	\caption{B/S架构图}
-	\label{fig:BS_structure}
-\end{figure}
+\subsubsection{功能设计}
 
-\subsubsection{RESTful API}
+心理评测系统由登陆模块、用户中心、评测中心和管理中心四大模块组成。登陆模块涉及用户的注册、登陆、邮箱验证、找回密码四个功能。用户中心可以修改个人信息、查看已经做的试卷的测评结果、查看未完成试卷的进度。评测中心可以做试卷进行评测和查看结果。管理中心是管理员对试卷、用户、成绩进行管理的模块。
 
-REST全称是Representational State Transfer，中文意思是表述（编者注：通常译为表征）性状态转移。
+\subsubsection{流程设计}
 
-RESTful API有以下的特征：
-
-(1)每一个uri代表一种资源。
-
-(2)客户端和服务器之间，传递这种资源的某种表现层。
-
-(3)客户端通过四个HTTP动词(GET、POST、DELETE、PUT)，对服务器端资源进行操作，实现"表现层状态转化"(增删改查)。
-
-(4)URL中通常不出现动词，只有名词。
-
-(5)使用JSON不使用XML。
-
-\subsubsection{使用Redux存储网络请求状态}
-
-Redux 是 JavaScript 状态容器，提供可预测化的状态管理。可以让你构建一致化的应用，运行于不同的环境（客户端、服务器、原生应用），并且易于测试。其使用Immutable数据结合React能让页面相应数据进行最小颗粒度的更新DOM结点。
+用户流程图如图3.1所示，主要流程为注册，激活邮箱后登陆然后进入评测中心进行评测，评测结果出来后查看分析结果。
 
 \begin{figure}[thbp!]
 	\centering
-	\includegraphics[width=1.0\linewidth]{figure/redux}
-	\caption{redux数据流}
-	\label{fig:redux}
+	\includegraphics[width=0.7\linewidth]{figure/user_use}
+	\label{fig:user_use} \\
+		图3.1 用户流程图
 \end{figure}
 
-每一次发起http请求获得响应的时候触发一个Redux Action，将服务端返回的数据存储在store中。这样做的好处是所有的需要使用服务端数据的React组件不需要影响父子组件之间的数据流直接提取公用的状态。
+管理员流程图如图3.2所示，管理员有普通用户的所有流程，可以进行进入管理中心对用户、试卷、成绩进行管理。
 
-\subsection{账号系统}
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/admin_use}
+	\label{fig:admin_use} \\
+		图3.2 管理员流程图
+\end{figure}
 
-\subsubsection{密码加密}
+\subsection{项目设计}
 
+\subsubsection{前端项目架构}
+
+前端项目架构如图3.3所示：
+
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figure/frontend_structure}
+	\label{fig:frontend_structure} \\
+		图3.3 前端项目目录
+\end{figure}
+
+build文件夹下存放着webpack的编译打包配置文件，分为两个环境，development开发环境和production生产环境。
+
+dist文件夹是存放着webpack打包后的文件，用作于webpack-dev-server的开发环境文件和上线后的生产环境文件。
+
+src文件夹是项目的根目录，里面的components文件夹存放着公用的组件，pages存放着系统的各个页面文件，store存放着项目所需要用到的redux状态仓库，App.tsx是项目的主页面，index.html是webpack打包注入js依赖的html文件，index.js是项目的主入口，utils.js是项目所需要的共用工具。
+
+.babelrc是babel-loader的配置文件，配置编译js的目标版本。
+
+.eslintrc是eslint代码检查的配置文件。
+
+.gitignore是git仓库push的时候忽略的文件。
+
+package.json是前端项目的架构文件，记载该前端项目所需要的依赖和依赖版本和该前端项目的基本信息。
+
+postcss.config.js是postcss的配置文件。
+
+README.md是描述该项目的markdown文件。
+
+stylelint.config.js是stylelint css代码检查的配置文件。
+
+tsconfig.json是Typescript的编译配置文件。
+
+tslint.json是tslint的配置文件。
+
+\subsubsection{后端项目架构}
+
+后端项目架构如图3.4所示：
+
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figure/backend_structure}
+	\label{fig:backend_structure} \\
+		图3.4 后端项目目录
+\end{figure}
+
+\_\_pycache\_\_是IDE自动生成的sourcemap索引文件夹。
+
+\_\_init\_\_.py文件是该Python包的默认包导出文件。
+
+app文件夹是项目的根目录，api文件夹存放着Resuful API的文件，decorators文件夹存放着项目中所用到的装饰器，models文件夹存放着该项目所用到的所有对应数据库中的数据模型，db.py是该项目连接数据库获得数据库实例的文件，mail.py是该项目所使用到的邮箱模块，utils.py是该项目的工具库。
+
+migrations是Flask-Migrate根据Sqlalchemy ORM数据模型定义进行数据库备份的文件夹。
+
+static是该后端项目的静态文件存放目录。
+
+tests是后端项目的测试文件存放目录。
+
+.gitignore是git仓库索要忽略文件的声明文件。
+
+config.py是该项目的配置文件。
+
+flasky.py是该项目的主入口文件，启动文件。
+
+requirements.txt记录着该项目的依赖和依赖版本。
+
+\subsection{项目重要依赖}
+
+\subsubsection{React}
+
+React是一个声明式，组件化的前端框架。其使用Virtual DOM技术把应用状态和DOM分离开来，搭配Diff算法来最小颗粒的更新DOM，而这一切开发者都不需要关心，开发者只需要专注注意力在开发业务代码上。React拥有极丰富的生态，本项目中还使用了React-redux来进行redux状态仓库的管理。
+
+编写React组件简略代码如下：
 \begin{lstlisting}[language=C]
-@property
-def password(self):
-	raise TypeError("cannot read a user's password")
+class App extends Component {
+  public componentDidMount() {
+    ...
+  }
 
-@password.setter
-def password(self, password):
-	self.password_hash = generate_password_hash(password)
+  public render() {
+    return (
+       <div> this is App
+         <a onClick={this.onClick}>
+       </div>
+     )
+}
 
-def verify_password(self, password):
-	if not password:
-		return False
-return check_password_hash(self.password_hash, password)
+private onClick = (e: ClickEvent) => {
+  e.preventDefault();
+  ...
+  }
+}
 \end{lstlisting}
 
-\begin{center}
-	{\small 用户密码的创建和验证}
-\end{center}
+所有React组件都要继承React.Component，拥有React组件的生命周期，每个React组件需要实现一个继承父类的render方法，来控制组件如何进行渲染。
 
-@property装饰器装饰一个属性的getter，修饰的函数名为属性名，返回的值是该属性的getter，此处该属性不能直接访问访问则会抛出异常。
+\subsubsection{Flask}
 
-@property同时会全局创建一个@password.setter的装饰器装饰属性的setter，在设置password的时候我们其实设置的是password\_hash这个属性，值为hash加密过的password。
+Flask是一个使用 Python 编写的轻量级 Web 应用框架。其 WSGI 工具箱采用 Werkzeug ，模板引擎则使用 Jinja2 。Flask使用 BSD 授权。Flask也被称为 “microframework” ，因为它使用简单的核心，用 extension 增加其他功能。Flask没有默认使用的数据库、窗体验证工具。本项目中使用了Flask-Migrate来进行数据库的备份，Flask-Mail来进行邮件的发送，Flask-SqlAlchemy来进行更加简单的操作SqlAlchemy。
 
-处理登陆请求的时候调用verify\_password函数判断密码是否正确。
-
-这样做的好处就是即使是数据库管理员也不可能知道用户的密码，只能看到加密后的字符串，同时md5是不可逆的加密方式，不能由加密后的字符串反推出明文，保证了数据的机密性。
-
-\subsubsection{邮箱验证}
-
-用户注册和忘记密码的时候需要使用邮箱验证。在用户注册成功后会创建一个用户独有的token，将token作为链接参数发送给用户邮箱中，在用户点击链接进入验证页面的时候会将token返回后端后端进行验证。
-
-验证失败有两种结果，一是token过期，二是token中的用户信息不匹配当前用户。通常不匹配的情况有三种：
-
-(1) 用户自己改了url中的token
-
-(2) 中间商劫持被修改了token信息。
-
-(3) 非法重定向。
-
-无论哪种都是非法篡改token的行为，影响用户信息安全。
-
-\begin{figure}[thbp!]
-	\centering
-	\includegraphics[width=1.0\linewidth]{figure/register_email}
-	\caption{注册邮箱激活}
-	\label{fig:register_email}
-\end{figure}
-
-\begin{figure}[thbp!]
-	\centering
-	\includegraphics[width=1.0\linewidth]{figure/password_mail}
-	\caption{忘记密码邮箱验证}
-	\label{fig:password_email}
-\end{figure}
-
-\subsection{评测与数据分析}
-
-\subsubsection{上传试卷}
-
-\begin{figure}[thbp!]
-	\centering
-	\includegraphics[width=1.0\linewidth]{figure/paper}
-	\caption{示例试卷}
-	\label{fig:paper}
-\end{figure}
-
-\begin{figure}[thbp!]
-	\centering
-	\includegraphics[width=1.0\linewidth]{figure/paper_database}
-	\caption{试卷表}
-	\label{fig:paper_database}
-\end{figure}
-
-上传试卷是通过上传excel表格。
-
-questions 问题的题目
-
-questions\_img 题目的配图的图片链接地址
-
-answers 题目的答案，答案之间用"/"来进行分割
-
-answers\_img 题目答案的配图的图片链接地址，配图之间用"*"进行分割，只支持一个答案只有一个配图
-
-answers\_score 对应每个答案对应试卷指标的分数加成，正数为增加，负数为减少，0则表示该答案对此项指标没有影响，每个答案之间用"/"分隔，每个指标之间用"\#"分隔
-
-answers\_multiple 该题目是否是多选，0表示单选，1表示多选
-
-comments\_condition 试卷各种评论的条件，每个指标之间用"/"分隔，0\#10表示该指标大于零小于10
-
-comments 具体的评论内容
-
-score\_attrs 试卷的得分指标
-
-table\_name 数据库中的表名
-
-paper\_name 试卷名称
-
-type 试卷的类型，psychology代表室心理评测，grade代表普通试卷，决定了试卷的算分机制
-
-description 试卷的描述
-
-上传文件后后端通过读取excel表格文件将数据插入到数据库中。
-
-每个问题之间的数据使用"@"来进行连接。
-
-在评测时候后端会对表数据进行解析和构建对象发送给前端。
-
-\begin{figure}[thbp!]
-	\centering
-	\includegraphics[width=1.0\linewidth]{figure/paper_data}
-	\caption{试卷数据结构}
-	\label{fig:paper_data}
-\end{figure}
-
-其中average、comment、most\_choices、answers、score、score\_above、score\_attrs是完成试卷以后才会有的参数，与数据分析结果的接口是一个接口。
-
-\subsubsection{数据分析}
-
-\begin{figure}[thbp!]
-	\centering
-	\includegraphics[width=1.0\linewidth]{figure/grade}
-	\caption{成绩数据表}
-	\label{fig:grade}
-\end{figure}
-
-用户回答完后，答案之间以"@"分隔开来进行存储。在计算得分的时候遍历答案进行指标的加减。
-
-\subsubsection{计算每个问题最多回答的答案}
-
+Flask定义视图路代码如下：
 \begin{lstlisting}[language=C]
-most_choice = "@".join(map(lambda x: Counter(x)
-		.most_common(1)[0][0], choices))
+@app.route("/index")
+  def Index():
+    return "<h1>Hello, Index</h1>"
 \end{lstlisting}
 
-Counter是Python内置的一个计数器类，可以得到每个元素出现的次数，其中.most\_common函数可以得到列表中出现频率最频繁的元素。
+传给app.route的是一个路径字符串，该方法返回一个装饰器，装饰器装饰路由函数，每个路由函数返回一个页面或者数据。
+
+\subsubsection{Typescript和Javascript}
+
+项目使用的前端语言并非常规的Javascript而是它的超集——Typescript，其作为超集在绝对兼容Javascript代码的前提下，加入了许多静态语言所拥有的特性，比如接口、泛型、类型判断等等。Javascript作为脚本语言其灵活性和方便性为大家所称道，但是也由于其灵活性，前端代码的质量低下导致项目难以维护和扩展，Typescript就是解决Javascript严谨性而诞生的一门语言。Java作为世界上用途最广泛，使用人数最多的语言就是因为其严谨性得到了很多企业的偏爱，Typescript看起来80\%都和Java很相似，可以理解为在Javascript的基础上加了一层代码检查和提示。
+
+\subsubsection{前端构建工具——Webpack}
+
+浏览器的版本众多，浏览器与浏览器之间的内核有许多差异，这导致同一份代码可能在不同浏览器下的表现不同，通过人工的方式编写兼容代码会有很高的人力成本和时间成本。同时在以前的开发过程中，前端依赖后端导致前端开发与后端严重耦合，降低了开发效率。前端工程化时代的到来，让前端拥有自己的项目构建能力，同时还解决了不同浏览器之间的兼容问题，诞生了许多前端构件工具，Gul、Grunt、Webpack等等。其中Webpack是当下活跃度最高，最火热的前端构建工具。
+
+Webpack最主要的两个功能是编译和打包。本项目所使用的React是使用JSX语法，不是浏览器默认可支持的语法，所以要将我们的前端代码编译成浏览器可识别的代码。Webpack最重要的两个概念就是loader和plugin，loader负责各种类型文件（.css，.js，.ts，.png......）的编译工作，可以将他们转化成目标浏览器的可识别文件，plugin则负责除了编译以外的所有工作，包括打包，体积优化，分离依赖等等。
+
+Webpack编译jsx和tsx文件成es5的配置代码如下：
+\begin{lstlisting}[language=C]
+{
+  test: /\.jsx?$/,
+  exclude: /node_modules/,
+  use: ["babel-loader"]
+},
+{
+  test: /\.tsx?$/,
+  exclude: /node_modules/,
+  use: [{
+    loader: "ts-loader",
+    options: {
+    transpileOnly: true,
+    getCustomTransformers: () => ({
+      before: [
+        require("ts-import-plugin")({
+          libraryName: "antd",
+          libraryDirectory: "es",
+          style: "css"})
+     ]
+    }),
+    compilerOptions: { module: "es2015" }
+    }
+   }]
+}
+\end{lstlisting}
+
+Webpack还提供了前端可实时预览的热更新服务器————webpack-dev-server，该插件可以实时的检测项目文件的变化并重新编译和打包让浏览器的页面刷新。
+
+Webpack打包体积优化也是一个深奥的学问。
+
+Webpack在原始配置的情况下，因为是单页面应用，所以打包出来以后的bundle文件非常之大，高达4MB，这对于首屏加载是非常不利的，过长的白屏会流失很多的用户量，所以Webpack的优化也是一门学问。
+
+常用的优化有以下几点：
+
+(1) 配置optimization中的splitChunks选项，会根据依赖图对于多次依赖的包单独打包然后进行引用。
+
+(2) 配置externals选项对于第三库在html文件中进行CDN引用，打包时候忽略该库。
+
+(3) 使用uglifyjsPlugin对打包文件进行压缩。
+
+(4) 使用懒加载进行加载组件和页面，react-loadable可以通过一个高阶组件包裹我们的异步组件使用import函数进行异步的加载组件，当加载成功的时候显示组件否则就加载Loading组件。
+
+(5) 配置Gzip。
+
+进行上面的优化以后，打包以后的文件按照路由和组件分成了十几个文件，最大的体积不超过400KB，减少了首屏加载的时间。
+
+\subsubsection{Pandas}
+
+Pandas是一个数据科学分析第三方库，可以方便的建立矩阵以及对矩阵中的数据进行各种数学运算和变换，在解析试卷和成绩分析的时候有很多使用。同时可以对矩阵中的数据进行清理和类型的转换。
+
+\subsection{数据库设计}
+
+通过SqlAlchemy我们可以方便的在数据库中创建一个表并生成记录，同时也可以方便的进行数据库操作，定义数据之间的关系，搭配Flask-Migrate还可以方便的进行数据库备份、恢复和回滚。
+
+这个系统的主要有三个表，用户表(users)，试卷表(papers)，成绩表(grades)，数据库实体之间的关系，箭头都代表一对多关系，粗体字体为必填字段，数据库关系如图3.5所示。
+
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figure/entity_relationship}
+	\label{fig:entity_relationship} \\
+		图3.5 数据库关系
+\end{figure}
+
+\subsubsection{一对多关系}
+
+如图中，用户表和成绩表，试卷表和成绩表之间都为一对多关系。SqlAlchemy中可以方便的通过relationship和foreignKey进行设置一对多关系。
+
+建立用户和成绩，试卷与成绩之间的一对多关系代码如下：
+\begin{lstlisting}[language=C]
+class User(Model):
+  ...
+  grades = relationship("Grade", backref="user", lazy="dynamic",
+  cascade="all, delete-orphan", passive_deletes=True)
+
+class Paper(Model):
+  ...
+  grades = relationship("Grade", backref="paper", lazy="dynamic",
+  cascade="all, delete-orphan", passive_deletes=True)
+
+class Grade(Model):
+  ...
+  user_id = Column(Integer, ForeignKey("users.id",
+  ondelete="CASCADE"))
+  paper_id = Column(Integer, ForeignKey("papers.id",
+  ondelete="CASCADE"))
+\end{lstlisting}
+
+relationship的这一端代表着1的这一端，backref传入的是在Grade对象下如何访问User或者Paper对象，lazy代表如何访问这个对象，一对多之间的关系通过外键的形式进行设置，比如users.id代表着是users这张表中的id作为外键。同时外键的字段设置需要和做外键的字段类型一模一样，否则会报错。
+
+lazy选项如下：
+
+(1) select，默认选项，直接查找出所有对象，例如user.grades直接通过列表列出所有该用户下的grade
+
+(2) dynamic返回的是一个查询集，例如 users.grades.filter\_by(...)返回的是一个查询集可以进行筛选操作。
+
+(3) joine类似于select，但是seletc在查询的过程中需要查询两个表，而joined是建立一个新的连结表进行查询，在数额大的情况下使用joined能节省不少性能。
+
+SqlAlchemy作为最强大的ORM工具当然不只是定义关系，还有就是定义实体不存在的时候如何处理与其相关的数据，加入一个用户被删除了，那么于其关联的成绩也应该要全部删除，而不是作为冗余数据存在数据库中，一套试卷被删除了同理。那么cascade就是干这个事情的。
+
+cascade选项如下：
+
+(1) save-update，默认选项，添加一条数据的时候会把其他和它相关的数据都添加到数据库中。
+
+(2) merge，默认选项，合并一个对象的时候会将使用了relationship相关联的对象也进行merge操作。
+
+(3) expunge，移除操作的时候，会将相关联的对象也进行移除，这个操作只是从session中删除，而不是从真正的数据库中删除。
+
+(4) all，包含上面所有的选项。
+
+(5) delete-orphan，删除相关的孤儿数据。
+
+对应的要在多的那一端设置ondelete属性。
+
+至此一对多的关系就设置好了，使用Flask-Migrate升级数据库的时候可以自动检测相关外键的设置然后更新数据库。
+
+\subsubsection{多对多关系}
+
+数据库多对多关系如图3.6所示
+
+\begin{figure}[thbp!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figure/rb_users_papers}
+	\label{fig:rb_users_papers} \\
+		图3.6 多对多关系
+\end{figure}
+
+一个用户可以做多张试卷，一张试卷也可以有很多用户来做。这就是一个多对多关系。多对多关系中，需要一个额外的连接表来做查询。
+
+多对多简略代码如下：
+\begin{lstlisting}[language=C]
+class User(Model):
+  ...
+  papers = relationship("Paper", secondary=rb_users_papers,
+  lazy="dynamic")
+
+class Paper(Model):
+  ...
+  users = relationship("User", secondary=rb_users_papers,
+  lazy="dynamic")
+
+// 连接表
+rb_users_papers = Table(
+  "rb_users_papers",
+  Column("user_id", Integer, ForeignKey("users.id")，
+  primary_key=True),
+  Column("paper_id", Integer, ForeignKey("papers.id"),
+  primary_key=True)
+)
+\end{lstlisting}
+
+上面的代码说明了users表和papers表之间是通过一个rb\_users\_papers进行连接查询的，同时连接表中的每个字段都需要与原字段的属性相同。在原表中的relationship中需要设置secondary属性来进行使用连接表的查询。使用连接表进行连接的两个表，任何一条记录被删除以后相关的连接表记录也会被删除，当然也可以设置与其关联的记录也被删除，但在此处的情况不适合这样做，试想一下，如果一个用户记录被删除了，那么该用户做过所有的试卷记录也会被删除，别人就无法做了，这样是非常的不合适的情况。
+
+数据库的设计是一个完善的软件系统必备也是最重要的一个阶段，一个好的数据库设计能让一个系统的性能良好、易于维护、易于拓展。有些人可能会觉得直接手写sql更加灵活和方便，但是如果作为一个多人维护开发的系统来说，每个人都有自己写sql的习惯，会让项目代码水平层次不齐难于维护，这时候就要使用SqlAlchemy这种工具了，通过一种OOP的方式来进行数据库的管理。
